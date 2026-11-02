@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const { signAccessToken, issueRefreshToken, rotateRefreshToken,
   revokeSession, clearRefreshCookie } = require('../services/token');
 const RefreshToken = require('../models/refreshToken');
+const discussion = require('../models/discussion');
+const { removePhoto } = require('../services/profilePhoto');
 
 const registerUser = async (req, res) => {
   try {
@@ -66,7 +68,7 @@ const changePassword = async (req, res) => {
 
     const user = await User.findById(req.user._id).select('+password');
     if (!user || !(await bcrypt.compare(currentPassword, user.password))) {
-      return res.status(401).json({ error: 'Current password is incorrect.' });
+      return res.status(403).json({ error: 'Current password is incorrect.' });
     }
 
     user.password = await bcrypt.hash(newPassword, 12);
@@ -88,11 +90,12 @@ const deleteUser = async (req, res) => {
 
     const user = await User.findById(req.user._id).select('+password');
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Incorrect password.' });
+      return res.status(403).json({ error: 'Incorrect password.' });
     }
+    await removePhoto(user.personal_photo);
     await RefreshToken.deleteMany({ user: req.user._id });
+    await discussion.deleteMany({ user: req.user._id });
     await User.findByIdAndDelete(req.user._id).select('+password');
-    // Also delete this user's chats/messages here, so no orphaned data remains
     res.status(200).json({ message: 'Account deleted.' });
   } catch (err) {
     console.error('Error deleting user:', err.message);

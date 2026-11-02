@@ -5,6 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const { rateLimit } = require('express-rate-limit');
 const { skipRateLimit } = require('./services/rateLimit');
+const { PHOTO_DIR } = require('./services/profilePhoto');
 const chatRouter = require('./routes/chat_route');
 const userRoutes = require('./routes/userRoute');
 const settingsRoute = require('./routes/settings_routes');
@@ -36,7 +37,7 @@ app.use('/profile', profileRoute);
 app.use('/users_photos', (req, res, next) => {
   res.set('Cross-Origin-Resource-Policy', 'cross-origin');
   next();
-}, express.static(path.join(__dirname, 'users_photos')));
+}, express.static(PHOTO_DIR));
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use((req, res) => res.status(404).json({ error: 'Not found.' }));

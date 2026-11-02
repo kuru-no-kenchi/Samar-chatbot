@@ -1,15 +1,13 @@
 const fs = require('fs');
 const fsp = fs.promises;
-const path = require('path');
 const crypto = require('crypto');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const { PHOTO_DIR, removePhoto } = require('../services/profilePhoto');
 
 const BOTS = ['bot1', 'bot2']; // replace with your real selectedBot values
-PHOTO_DIR = path.join(__dirname, '..', 'users_photos')
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-fs.mkdirSync(PHOTO_DIR, { recursive: true });
 
 const isName = (v) => typeof v === 'string' && v.trim().length > 0 && v.trim().length <= 50;
 
@@ -36,7 +34,7 @@ const updateProfile = async (req, res) => {
 
             const account = await User.findById(req.user._id).select('+password');
             if (!account || !(await bcrypt.compare(currentPassword, account.password))) {
-                return res.status(401).json({ message: 'Current password is incorrect.' });
+                return res.status(403).json({ message: 'Current password is incorrect.' });
             }
 
             updates.email = email.trim().toLowerCase();
@@ -120,12 +118,6 @@ const looksLikeImage = async (filePath, mimetype) => {
     } finally {
         await fd.close();
     }
-};
-
-// Deletes a photo by name, staying inside PHOTO_DIR
-const removePhoto = async (filename) => {
-    if (!filename) return;
-    await fsp.unlink(path.join(PHOTO_DIR, path.basename(filename))).catch(() => { });
 };
 
 const uploadPhoto = async (req, res) => {

@@ -5,7 +5,7 @@ const { chat } = require('../services/llm');
 
 const app = require('../app');
 const Discussion = require('../models/discussion');
-const { PATHS, auth, createUser } = require('./helpers');
+const { PATHS, auth, createUser } = require('./setup/helpers');
 
 beforeEach(() => {
     chat.mockReset();

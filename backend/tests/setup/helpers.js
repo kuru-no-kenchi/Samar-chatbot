@@ -1,5 +1,6 @@
 const request = require('supertest');
-const app = require('../app');
+const app = require('../../app');
+const fs = require('fs');
 
 const PATHS = {
     register: '/users/register',
@@ -46,4 +47,8 @@ async function createUser(overrides = {}) {
     return { email, password: body.password, token, cookie };
 }
 
-module.exports = { PATHS, PASSWORD, auth, refreshCookie, login, createUser };
+const png = (size = 64) =>
+    Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(size)]);
+const photoFiles = () => fs.readdirSync(process.env.PHOTO_DIR);
+
+module.exports = { PATHS, PASSWORD, auth, refreshCookie, login, createUser, png, photoFiles };

@@ -2,7 +2,7 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const app = require('../app');
 const User = require('../models/user');
-const { PATHS, PASSWORD, auth, login, createUser } = require('./helpers');
+const { PATHS, PASSWORD, auth, login, createUser } = require('./setup/helpers');
 
 describe('registration', () => {
     const valid = { first_name: 'Ada', last_name: 'Lovelace', email: 'Ada@Example.com', password: PASSWORD };

@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
-const { PATHS, auth, createUser, refreshCookie } = require('./helpers');
+const { PATHS, auth, createUser, refreshCookie } = require('./setup/helpers');
 
 const refresh = (cookie) =>
     request(app).post(PATHS.refresh).set('Cookie', cookie).send({});
