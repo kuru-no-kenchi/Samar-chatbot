@@ -17,6 +17,9 @@ import { authInterceptor } from './interceptors/auth.interceptor';
 import { AuthService } from './services/auth.service';
 import { ThemeService } from './services/theme.service';
 import { LanguageService } from './services/language.service';
+import { environment } from '../environments/environment';
+
+export const API_URL = environment.backendHostName;
 
 const SamarPreset = definePreset(Aura, {
   semantic: {

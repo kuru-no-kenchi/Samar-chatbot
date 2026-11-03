@@ -1,7 +1,7 @@
 services:
   mongo:
     image: mongo:7
-    container_name: ichat-mongo
+    container_name: Samar-mongo
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:?Set MONGO_ROOT_USER in .env}
@@ -21,7 +21,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: ichat-backend
+    container_name: Samar-backend
     restart: unless-stopped
     depends_on:
       mongo:
@@ -29,7 +29,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: "5000"
-      MONGODB_URI: mongodb://${MONGO_APP_USER:?Set MONGO_APP_USER in .env}:${MONGO_APP_PASSWORD:?Set MONGO_APP_PASSWORD in .env}@mongo:27017/ichat?authSource=ichat
+      MONGODB_URI: mongodb://${MONGO_APP_USER:?Set MONGO_APP_USER in .env}:${MONGO_APP_PASSWORD:?Set MONGO_APP_PASSWORD in .env}@mongo:27017/Samar?authSource=Samar
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
       CLIENT_ORIGIN: ${CLIENT_ORIGIN:?Set CLIENT_ORIGIN in .env}
       COOKIE_PATH: /api/users
@@ -63,7 +63,7 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: ichat-frontend
+    container_name: Samar-frontend
     restart: unless-stopped
     depends_on:
       backend:

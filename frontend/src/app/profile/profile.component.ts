@@ -11,13 +11,12 @@ import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
-import { environment } from '../../environments/environment';
+import { API_URL } from '../app.config';
 import { AuthService } from '../services/auth.service';
 import { ProfileService, UserProfile } from '../services/profile.service';
 
 const BOTS = ['bot1', 'bot2']; // must match the BOTS list in the backend profile controller
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
-const API_URL = environment.backendHostName;
 const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const passwordsMatch = (g: AbstractControl): ValidationErrors | null =>

@@ -2,10 +2,8 @@ import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, map, tap } from 'rxjs';
 import { AuthService } from './auth.service';
-import { environment } from '../../environments/environment';
 import { toSignal } from '@angular/core/rxjs-interop';
-
-const API_URL = environment.backendHostName;
+import { API_URL } from '../app.config';
 
 export interface ChatMessage {
   _id?: string;

@@ -1,6 +1,6 @@
-# iChat
+# Samar
 
-iChat is a self-hosted chat application with an Angular web client, an Express API, MongoDB persistence, and an OpenAI-compatible language-model provider.
+Samar is a self-hosted chat application with an Angular web client, an Express API, MongoDB persistence, and an OpenAI-compatible language-model provider.
 
 ## Features
 
@@ -193,7 +193,7 @@ After changing Compose or container configuration, check service state with `doc
 
 ### Backend is unhealthy or reports MongoDB authentication failure
 
-Check `docker compose logs --tail 100 backend` and verify `MONGO_APP_USER` and `MONGO_APP_PASSWORD` in `.env`. The MongoDB initialization script creates the app user only when the data directory is first initialized. Editing `.env` later does **not** change credentials in an existing `mongo_data` volume. Restore the original credentials or intentionally update the existing MongoDB user; do not remove the volume unless you accept losing its database contents.
+Check `docker compose logs --tail 100 backend` and verify `MONGO_APP_USER` and `MONGO_APP_PASSWORD` in `.env`. The MongoDB initialization script creates the app user only when the data directory is first initialized. Editing `.env` later does **not** change credentials in an existing `mongo_data` volume. Restore matching credentials or intentionally update the existing MongoDB user and migrate data to the `Samar` database; do not remove the volume unless you accept losing its database contents.
 
 ### Frontend does not start because certificate files are missing
 

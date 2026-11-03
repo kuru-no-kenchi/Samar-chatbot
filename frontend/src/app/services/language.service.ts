@@ -4,13 +4,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './auth.service';
 import { ProfileService } from './profile.service';
 import { environment } from '../../environments/environment';
+import { API_URL } from '../app.config';
 
 export const LANGUAGES = ['en', 'fr', 'ar'] as const; // same list as the backend and the schema enum
 export type Lang = (typeof LANGUAGES)[number];
 
 const KEY = 'appLanguage';
 const DEFAULT_LANG: Lang = 'fr';
-const API_URL = environment.backendHostName;
 const isLang = (v: unknown): v is Lang => LANGUAGES.includes(v as Lang);
 
 @Injectable({ providedIn: 'root' })

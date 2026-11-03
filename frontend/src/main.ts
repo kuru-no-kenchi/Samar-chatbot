@@ -5,20 +5,14 @@ import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
-import { HomeComponent } from './app/home/home.component';
-import { LoginComponent } from './app/login/login.component';
-import { RegisterComponent } from './app/register/register.component';
-import { SettingsComponent } from './app/settings/settings.component';
-import { authGuard } from './app/guard/auth.guard';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { NotfoundComponent } from './app/notfound/notfound.component';
-import { ProfileComponent } from './app/profile/profile.component';
 import { provideTranslateModule } from './app/services/translation.service';
 import { inject, provideAppInitializer } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from './app/services/auth.service';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
 import { routes } from './app/app.routes';
+
 bootstrapApplication(AppComponent, {
   providers: [
     provideAppInitializer(() =>

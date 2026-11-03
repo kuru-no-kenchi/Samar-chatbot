@@ -3,14 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { environment } from '../../environments/environment';
+import { API_URL } from '../app.config';
 import { ChatService } from '../services/chat.service';
 import { LANGUAGES, Lang, LanguageService } from '../services/language.service';
 import { ProfileService } from '../services/profile.service';
 import { ThemeService } from '../services/theme.service';
 
-const API_URL = environment.backendHostName;
 
 @Component({
   selector: 'app-settings',

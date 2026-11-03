@@ -1,10 +1,8 @@
 import { Injectable, effect, inject, untracked } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { ProfileService } from './profile.service';
-
-const API_URL = environment.backendHostName;
+import { API_URL } from '../app.config';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {

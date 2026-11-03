@@ -4,7 +4,6 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from './services/language.service';
-import { ThemeService } from '@primeng/themes';
 
 @Component({
   selector: 'app-root',

@@ -19,7 +19,7 @@ json_quote() {
 init_script=$(mktemp)
 trap 'rm -f "$init_script"' EXIT
 
-printf 'db = db.getSiblingDB("ichat");\ndb.createUser({ user: %s, pwd: %s, roles: [{ role: "readWrite", db: "ichat" }] });\n' \
+printf 'db = db.getSiblingDB("Samar");\ndb.createUser({ user: %s, pwd: %s, roles: [{ role: "readWrite", db: "Samar" }] });\n' \
   "$(json_quote "$MONGO_APP_USER")" \
   "$(json_quote "$MONGO_APP_PASSWORD")" > "$init_script"
 

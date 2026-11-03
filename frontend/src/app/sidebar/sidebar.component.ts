@@ -15,7 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TranslateModule } from '@ngx-translate/core';
-import { environment } from '../../environments/environment';
+import { API_URL } from '../app.config';
 import { AuthService } from '../services/auth.service';
 import { ChatService, DiscussionSummary } from '../services/chat.service';
 import { ProfileService } from '../services/profile.service';
@@ -24,7 +24,6 @@ import { LogoMarkComponent } from '../logo-mark/logo-mark.component';
 
 const MAX_TITLE_LENGTH = 80;
 const DAY = 24 * 60 * 60 * 1000;
-const API_URL = environment.backendHostName;
 
 interface Group {
   label: string;
