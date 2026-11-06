@@ -1,6 +1,6 @@
 services:
   mongo:
-    image: mongo:7
+    image: mongo:9
     container_name: Samar-mongo
     restart: unless-stopped
     environment:
