@@ -1,23 +1,25 @@
 <div class="flex h-dvh overflow-hidden bg-page text-ink">
-  @if (sidebarVisible) {
-    @if (isMobile()) {
-      <div
-        class="fixed inset-0 z-30 bg-black/40"
-        (click)="toggleSidebar()"
-        aria-hidden="true"
-      ></div>
-    }
-    <app-sidebar
-      class="flex h-full w-[272px] shrink-0 flex-col border-r border-line bg-sidebar"
-      [class.fixed]="isMobile()"
-      [class.inset-y-0]="isMobile()"
-      [class.left-0]="isMobile()"
-      [class.z-40]="isMobile()"
-      (mobileToggleSidebarEvent)="toggleSidebar()"
-      (discussionSelected)="closeSidebarOnMobile()"
-      (newChatStarted)="closeSidebarOnMobile()"
-    />
-  }
+@if (sidebarVisible && isMobile()) {
+  <div
+    class="fixed inset-0 z-30 bg-black/40"
+    (click)="toggleSidebar()"
+    aria-hidden="true"
+  ></div>
+}
+
+<app-sidebar
+  class="flex h-full w-[272px] shrink-0 flex-col border-r border-line bg-sidebar"
+  [class.fixed]="isMobile()"
+  [class.inset-y-0]="isMobile()"
+  [class.left-0]="isMobile()"
+  [class.z-40]="isMobile()"
+  [class.hidden]="!isMobile() && !sidebarVisible"
+  [class.-translate-x-full]="isMobile() && !sidebarVisible"
+  [attr.inert]="isMobile() && !sidebarVisible ? '' : null"
+  (mobileToggleSidebarEvent)="toggleSidebar()"
+  (discussionSelected)="closeSidebarOnMobile()"
+  (newChatStarted)="closeSidebarOnMobile()"
+/>
 
   <main class="flex min-w-0 flex-1 flex-col">
     <app-header

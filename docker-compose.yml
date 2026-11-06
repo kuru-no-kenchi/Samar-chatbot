@@ -39,6 +39,8 @@ services:
       LLM_BASE_URL: ${LLM_BASE_URL:?Set LLM_BASE_URL in .env}
       LLM_MODEL: ${LLM_MODEL:?Set LLM_MODEL in .env}
       LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-}
+      DAILY_USER_LIMIT: ${DAILY_USER_LIMIT:-30}
+      DAILY_GLOBAL_LIMIT: ${DAILY_GLOBAL_LIMIT:-45}
     volumes:
       - photos:/app/users_photos
     read_only: true

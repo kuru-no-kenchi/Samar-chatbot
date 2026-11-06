@@ -5,3 +5,5 @@ process.env.DISABLE_RATE_LIMIT = 'true';
 process.env.LLM_API_KEY = 'test';
 process.env.LLM_BASE_URL = 'http://localhost:0';
 process.env.LLM_MODEL = 'test-model';
+process.env.DAILY_USER_LIMIT = '1000';
+process.env.DAILY_GLOBAL_LIMIT = '0';

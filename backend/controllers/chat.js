@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const discussion = require('../models/discussion');
 const User = require('../models/user');
 const { chat } = require('../services/llm');
+const quota = require('../services/daily_quota');
 
 const MAX_MESSAGE_LENGTH = 4000;
 const MAX_HISTORY = 20;
@@ -47,17 +48,39 @@ const chatController = async (req, res) => {
     while (history.length && history[0].role !== 'user') history.shift();
     history.push({ role: 'user', content: text });
 
+    const reservation = await quota.reserve(user._id);
+    if (!reservation.ok) {
+      const everyone = reservation.reason === 'global';
+      return res.status(429).json({
+        error: everyone
+          ? 'The assistant has reached its daily limit for everyone. Please try again tomorrow.'
+          : `You have used all ${reservation.limit} of today's messages. They reset at midnight UTC.`,
+        code: everyone ? 'GLOBAL_LIMIT' : 'DAILY_LIMIT',
+        resetsAt: reservation.resetsAt,
+      });
+    }
+
     let assistantReply;
     try {
       assistantReply = await chat(history);
     } catch (err) {
-      console.error('LLM error:', err.status, err.message);
+      await quota.refund(reservation);
+      if (err.status === 429) {
+        return res.status(429).json({ error: 'The assistant is busy or the daily limit was reached. Try again later.' });
+      }
       return res.status(502).json({ error: 'The assistant is unavailable right now.' });
     }
-    if (!assistantReply) return res.status(502).json({ error: 'Empty response from the assistant.' });
+    if (!assistantReply) {
+      await quota.refund(reservation);
+      return res.status(502).json({ error: 'Empty response from the assistant.' });
+    }
 
     if (!saveHistory) {
-      return res.status(200).json({ reply: assistantReply, message: 'Message not saved (history disabled)' });
+      return res.status(200).json({
+        reply: assistantReply,
+        message: 'Message not saved (history disabled)',
+        quota: reservation.usage,
+      });
     }
 
     const now = new Date();
@@ -88,12 +111,18 @@ const chatController = async (req, res) => {
       success: true,
       reply: assistantReply,
       discussion: { _id: saved._id, title: saved.title },
+      quota: reservation.usage,
     });
   } catch (error) {
-    if (error.status === 429) {
-      return res.status(429).json({ error: 'The assistant is busy or the daily limit was reached. Try again later.' });
-    }
-    console.error('ChatController error:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+const getQuota = async (req, res) => {
+  try {
+    res.json({ quota: await quota.getUsage(req.user._id) });
+  } catch (err) {
+    console.error('getQuota failed:', err.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -149,7 +178,7 @@ const deleteConversation = async (req, res) => {
 const deleteAllConversation = async (req, res) => {
   try {
 
-    const result = await discussion.deleteMany({ user:req.user._id });
+    const result = await discussion.deleteMany({ user: req.user._id });
     res.json({ success: true, message: `${result.deletedCount} discussions deleted successfully` });
   } catch (error) {
     console.error('deleteAllConversation failed:', error.message);
@@ -182,6 +211,6 @@ const modifyDiscussion = async (req, res) => {
 };
 
 module.exports = {
-  chatController, getdiscussionMessages, getdiscussions,
+  chatController, getdiscussionMessages, getQuota, getdiscussions,
   deleteConversation, modifyDiscussion, deleteAllConversation,
 };

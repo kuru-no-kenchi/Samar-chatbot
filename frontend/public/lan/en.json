@@ -74,5 +74,7 @@
   "LANDING_F3_TITLE": "Your language, your theme",
   "LANDING_F3_TEXT": "English, French and Arabic, in light or dark mode.",
   "LANDING_FOOTER_NOTE": "A personal project",
-  "LANDING_GITHUB": "Source on GitHub"
+  "LANDING_GITHUB": "Source on GitHub",
+  "QUOTA_EXHAUSTED": "Daily limit reached. It resets at {{time}}.",
+  "QUOTA_LEFT": "Message left today: {{count}}"
 }

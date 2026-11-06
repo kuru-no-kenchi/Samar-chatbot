@@ -14,6 +14,7 @@ const PATHS = {
     photo: '/profile/me/photo',
     preferences: '/preferences',
     chat: '/chat/new',
+    quota: '/chat/quota',
     discussions: '/chat/discussions',
     messages: (id) => `/chat/discussions/${id}/messages`,
     rename: (id) => `/chat/discussions/${id}`,

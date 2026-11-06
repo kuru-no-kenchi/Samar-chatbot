@@ -30,6 +30,7 @@ export class ChatComponent implements AfterViewChecked, OnInit, OnDestroy {
   private shouldScroll = false;
   private destroyRef = inject(DestroyRef);
   private chatService = inject(ChatService);
+  readonly quota = this.chatService.quota;
   private messageService = inject(MessageService);
   private translate = inject(TranslateService);
   private profile = inject(ProfileService);
