@@ -44,7 +44,6 @@ app.use((req, res) => res.status(404).json({ error: 'Not found.' }));
 app.use((err, req, res, next) => {
   if (err.type === 'entity.too.large') return res.status(413).json({ error: 'Request too large.' });
   if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'Invalid JSON.' });
-  console.error('Unhandled error:', err.message);
   res.status(500).json({ error: 'Internal server error.' });
 });
 

@@ -1,5 +1,7 @@
 <div class="mx-auto w-full max-w-3xl shrink-0 px-4 pb-3">
-  <div class="rounded-2xl border border-line bg-card p-3 shadow-sm focus-within:border-clay/60">
+  <div
+    class="rounded-2xl border border-line bg-card p-3 shadow-sm focus-within:border-clay/60"
+  >
     <textarea
       #box
       rows="1"
@@ -37,7 +39,7 @@
       <button
         type="button"
         (click)="sendMessage()"
-        [disabled]="disabled || !messageText.trim()"
+        [disabled]="disabled || exhausted || !messageText.trim()"
         [attr.aria-label]="'SEND' | translate"
         class="flex size-8 items-center justify-center rounded-lg bg-clay text-white hover:bg-clay-hover disabled:opacity-40"
       >
@@ -46,5 +48,16 @@
     </div>
   </div>
 
-  <p class="mt-2 text-center text-xs text-muted">{{ 'AI_DISCLAIMER' | translate }}</p>
+  <p class="mt-2 text-center text-xs text-muted">
+    @if (exhausted) {
+      <span class="text-red-600 dark:text-red-400">{{
+        "QUOTA_EXHAUSTED" | translate: { time: resetTime }
+      }}</span>
+    } @else {
+      @if (quota && quota.remaining <= 10) {
+        {{ "QUOTA_LEFT" | translate: { count: quota.remaining } }} ·
+      }
+      {{ "AI_DISCLAIMER" | translate }}
+    }
+  </p>
 </div>

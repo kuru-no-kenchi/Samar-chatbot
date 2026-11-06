@@ -74,5 +74,7 @@
   "LANDING_F3_TITLE": "لغتك ومظهر التطبيق",
   "LANDING_F3_TEXT": "الإنجليزية والفرنسية والعربية، مع الوضع الفاتح أو الداكن.",
   "LANDING_FOOTER_NOTE": "مشروع شخصي",
-  "LANDING_GITHUB": "المصدر على GitHub"
+  "LANDING_GITHUB": "المصدر على GitHub",
+  "QUOTA_LEFT":"",
+  "QUOTA_EXHAUSTED": "تم بلوغ الحد اليومي. تتم إعادة التعيين عند {{time}}."
 }

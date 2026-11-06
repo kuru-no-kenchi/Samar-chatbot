@@ -58,6 +58,7 @@
     [(messageText)]="newMessage"
     (sendMessageEvent)="sendMessage($event)"
     [disabled]="isLoading"
+    [quota]="quota()"
   />
 
   @if (isEmpty) {

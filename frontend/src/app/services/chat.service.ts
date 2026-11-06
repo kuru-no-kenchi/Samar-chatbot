@@ -1,4 +1,11 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import {
+  Injectable,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, map, tap } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -37,6 +44,14 @@ export interface ChatResponse {
   message?: string;
   discussion?: { _id: string; title?: string };
   error?: string;
+  quota?: Quota | null;
+}
+
+export interface Quota {
+  used: number;
+  limit: number;
+  remaining: number;
+  resetsAt: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -44,6 +59,8 @@ export class ChatService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
   private api = `${API_URL}/chat`;
+  readonly quota = signal<Quota | null>(null);
+  private email = computed(() => this.auth.user()?.email ?? null);
 
   private activeId = new BehaviorSubject<string | null>(null);
   readonly activeDiscussion$ = this.activeId.asObservable();
@@ -59,10 +76,15 @@ export class ChatService {
   constructor() {
     localStorage.removeItem('activeDiscussionId');
     effect(() => {
-      if (this.auth.user() === null) {
-        this.setActiveDiscussion(null);
-        this.discussions.set([]);
-      }
+      const email = this.email();
+      untracked(() => {
+        if (email) this.loadQuota();
+        else {
+          this.setActiveDiscussion(null);
+          this.discussions.set([]);
+          this.quota.set(null);
+        }
+      });
     });
   }
 
@@ -74,6 +96,13 @@ export class ChatService {
 
   getActiveDiscussionId(): string | null {
     return this.activeId.value;
+  }
+
+  loadQuota() {
+    this.http.get<{ quota: Quota | null }>(`${this.api}/quota`).subscribe({
+      next: (res) => this.quota.set(res.quota),
+      error: () => {}, // the hint is optional
+    });
   }
 
   setActiveDiscussion(id: string | null) {
@@ -88,8 +117,14 @@ export class ChatService {
   sendChatMessage(payload: ChatPayload): Observable<ChatResponse> {
     const isNewChat = !payload.discussionId;
     return this.http.post<ChatResponse>(`${this.api}/new`, payload).pipe(
-      tap((res) => {
-        if (isNewChat && res.discussion) this.listChanged.next(); // new chat -> refresh sidebar
+      tap({
+        next: (res) => {
+          if (isNewChat && res.discussion) this.listChanged.next();
+          if (res.quota !== undefined) this.quota.set(res.quota);
+        },
+        error: (err) => {
+          if (err.status === 429 && err.error?.code) this.loadQuota(); // resync after a daily-limit refusal
+        },
       }),
     );
   }
