@@ -21,7 +21,7 @@
     "@fontsource-variable/source-serif-4": "^5.3.1",
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
-    "@primeng/themes": "^19.1.0",
+    "@primeng/themes": "^21.0.4",
     "@primeuix/themes": "^3.1.0",
     "@tailwindcss/postcss": "^4.3.3",
     "bootstrap-icons": "^1.13.2",
